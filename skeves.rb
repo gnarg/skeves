@@ -5,7 +5,7 @@ require 'yaml'
 require 'lib/skills'
 
 get '/' do
-  eve_auth = YAML.load(File.open(File.dirname(__FILE__) + '/eve_auth.yml'))
+  eve_auth = YAML.load(File.open(File.dirname(__FILE__) + '/config/eve_auth.yml'))
   
   api = Reve::API.new(eve_auth['user_id'], eve_auth['api_key'])
   queue = []

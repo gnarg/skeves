@@ -13,6 +13,6 @@ Requirements
 Installation
 ------------
 
-1. Copy eve_auth.yml.example to eve_auth.yml
+1. Copy config/eve_auth.yml.example to config/eve_auth.yml
 1. Fill in your own USER_ID and API_KEY (<http://www.eveonline.com/api/default.asp>)
 1. Start 'er up as a regular Rack app

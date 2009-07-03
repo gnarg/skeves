@@ -1,10 +1,6 @@
-require 'rubygems'
-require 'sinatra'
-
-Sinatra::Application.default_options.merge!(
-  :run => false,
-  :env => ENV['RACK_ENV']
-)
-
 require 'skeves'
-run Sinatra::Application
+
+set :run, false
+set :environment, :production
+
+run Sinatra::Application 

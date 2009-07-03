@@ -7,4 +7,4 @@ Sinatra::Application.default_options.merge!(
 )
 
 require 'skeves'
-run Sinatra.application
+run Sinatra::Application

@@ -11,7 +11,10 @@ get '/' do
   queue = []
   api.characters.each do |character|
     queue = api.skill_queue(:characterid => character.id)
-    break if queue.any?
+    if queue.any?
+      @character = character
+      break
+    end
   end
   
   return 'No skills in queue.' if queue.empty?

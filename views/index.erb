@@ -6,7 +6,7 @@
   <% @skills.each do |skill| %>
     <li>
       <strong><%= skill.name %> <%= skill.to_level %></strong> 
-      finished in <%= skill.days_left %>d <%= skill.hours_left %>h <%= skill.minutes_left %>m <%= skill.seconds_left %>s (<%= skill.end_time.strftime('%m/%d/%y %H:%M:%S') %>)
+      finishes in <%= skill.days_left %>d <%= skill.hours_left %>h <%= skill.minutes_left %>m <%= skill.seconds_left %>s (<%= skill.end_time.strftime('%m/%d/%y %H:%M:%S') %>)
     </li>
   <% end %>
   </ol>

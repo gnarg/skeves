@@ -1,7 +1,7 @@
 Overview
 --------
 
-Tells you what's in your current skill queue and when it will run out.
+Tells you what's in your current Eve Online skill queue and when it will run out.
 
 Requirements
 ------------

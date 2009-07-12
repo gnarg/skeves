@@ -5,5 +5,11 @@
   <div>
     <label for="pilot[api_key]">API Key:</label> <input name="pilot[api_key]" type="text" value="<%= @pilot.api_key %>"/>
   </div>
+  <div>
+    <label for="pilot[email]">Email:</label> <input name="pilot[email]" type="text" value="<%= @pilot.email %>"/>
+  </div>
+  <div>
+    <label for="pilot[monitor]">Send empty queue warnings?</label> <input name="pilot[monitor]" type="checkbox" value="1" <%= 'checked="checked"' if @pilot.monitor %> disabled />
+  </div>
   <input type="submit" value="update"/>
 </form>

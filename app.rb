@@ -21,10 +21,31 @@ class Pilot
   property :nickname, String
   property :user_id,  String
   property :api_key,  String, :size => 64
+  property :email,    String, :length => (1..255), :format => :email_address
+  property :monitor,  Boolean, :default => false
 
   validates_present :nickname
   validates_present :user_id
   validates_present :api_key
+
+  def skill_queue
+    api = Reve::API.new(self.user_id, self.api_key)
+    queue = []
+    api.characters.each do |character|
+      queue = api.skill_queue(:characterid => character.id)
+      if queue.any?
+        @character = character
+        break
+      end
+    end
+
+    queue.map{|s| Skeves::Skill.new(s)}    
+  end
+  
+  def character
+    skill_queue if !@character
+    @character
+  end
 end
 
 before do
@@ -44,7 +65,11 @@ end
 post '/register' do
   @pilot ||= Pilot.new
   @pilot.attributes = params['pilot']
+  if @pilot.email.nil? || @pilot.email.empty?
+    @pilot.email = @user.email
+  end
   @pilot.nickname = @user.nickname
+  
   if @pilot.save
     redirect '/queue'
   else
@@ -61,19 +86,25 @@ get '/queue' do
     redirect '/register'
   end
   
-  api = Reve::API.new(@pilot.user_id, @pilot.api_key)
-  queue = []
-  api.characters.each do |character|
-    queue = api.skill_queue(:characterid => character.id)
-    if queue.any?
-      @character = character
-      break
-    end
-  end
+  @skills = @pilot.skill_queue
+  return 'No skills in queue.' if @skills.empty?
   
-  return 'No skills in queue.' if queue.empty?
-  
-  @skills = queue.map{|s| Skeves::Skill.new(s)}
-
   erb :queue
+end
+
+get '/cron/monitor' do
+  Pilot.all(:monitor => true).each do |pilot|
+    send_queue_warning(pilot) unless pilot.skill_queue.any?
+  end
+end
+
+def send_queue_warning(pilot)
+  user_address = pilot.email
+  sender_address = "monitor@jguymon-skeves.appspot.com"
+  subject = "[skeves] Skill queue empty"
+  body = <<-EOM
+    No skill currently training.
+  EOM
+    
+  Mail.send(sender_address, user_address, subject, body)
 end

@@ -1,4 +1,4 @@
-<h3>Skill queue for: <%= @character.name %></h3>
+<h3>Skill queue for: <%= @pilot.character.name %></h3>
 <div>
   <strong>Queue length:</strong> <%= @skills.last.days_left %>d <%= @skills.last.hours_left %>h <%= @skills.last.minutes_left %>m <%= @skills.last.seconds_left %>s (<%= @skills.last.end_time.strftime('%m/%d/%y %H:%M:%S') %>)
 </div>

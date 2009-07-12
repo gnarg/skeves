@@ -60,12 +60,12 @@ get '/' do
   erb :index
 end
 
-get '/register' do
+get '/pilot' do
   @pilot ||= Pilot.new
-  erb :register
+  erb :pilot
 end
 
-post '/register' do
+post '/pilot' do
   @pilot ||= Pilot.new
   @pilot.attributes = params['pilot']
   if @pilot.email.nil? || @pilot.email.empty?
@@ -86,7 +86,7 @@ get '/queue' do
   end
 
   if !@pilot
-    redirect '/register'
+    redirect '/pilot'
   end
   
   @skills = @pilot.skill_queue

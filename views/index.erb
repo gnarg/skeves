@@ -4,10 +4,10 @@
 
 <% if @user %>
   <% if @pilot %>
-    <div><a href='/queue'>Skill Queue</a></div>
-    <div><a href="/register">Settings</a></div>
+    <div><a href="/queue">Skill Queue</a></div>
+    <div><a href="/pilot">Settings</a></div>
   <% else %>
-    <div><a href="/register">Register</a></div>
+    <div><a href="/pilot">Register</a></div>
   <% end %>
   <div><a href="<%= Users.create_logout_url('/') %>">Sign Out</a></div>
 <% else %>

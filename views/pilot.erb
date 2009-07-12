@@ -10,7 +10,7 @@
     <span style="color: grey; font-size: small">If left blank, will use your google email address.</span>
   </div>
   <div>
-    <label for="pilot[monitor]">Send empty queue warnings?</label> <input name="pilot[monitor]" type="checkbox" value="1" <%= 'checked="checked"' if @pilot.monitor %> disabled />
+    <label for="pilot[monitor]">Send empty queue warnings?</label> <input name="pilot[monitor]" type="checkbox" value="1" <%= 'checked="checked"' if @pilot.monitor %>/>
   </div>
   <input type="submit" value="update"/>
 </form>

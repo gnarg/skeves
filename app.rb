@@ -24,6 +24,7 @@ class Pilot
   property :api_key,  String, :size => 64
   property :email,    String, :length => (1..255), :format => :email_address
   property :monitor,  Boolean, :default => false
+  property :notified, Boolean, :default => false
 
   validates_present :nickname
   validates_present :user_id
@@ -109,9 +110,12 @@ get '/cron/monitor' do
   
   Pilot.all(:monitor => true).each do |pilot|
     begin
-      if pilot.skill_queue.empty?
+      if pilot.skill_queue.empty? && !pilot.notified
         send_queue_warning(pilot)  
         gae_log.info "Sent email to #{pilot.nickname}."
+      elsif pilot.skill_queue.any? && pilot.notified
+        pilot.notified = false
+        pilot.save
       end
     rescue Exception => e
       gae_log.warn "Problem with #{pilot.nickname}: #{e.class.name} - #{e.message}"
@@ -128,6 +132,9 @@ def send_queue_warning(pilot)
   body = <<-EOM
     No skill in training.
   EOM
-    
+  
   AppEngine::Mail.send(sender_address, user_address, subject, body)
+
+  pilot.notified = true
+  pilot.save
 end

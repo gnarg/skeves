@@ -1,0 +1,11 @@
+<datastore-indexes>
+    <datastore-index kind="Pilot" ancestor="false" source="auto">
+        <property name="nickname" direction="asc"/>
+        <property name="id" direction="asc"/>
+    </datastore-index>
+
+    <datastore-index kind="Pilot" ancestor="false" source="auto">
+        <property name="monitor" direction="asc"/>
+        <property name="id" direction="asc"/>
+    </datastore-index>
+</datastore-indexes>

@@ -1,12 +1,13 @@
 <form action="/register" method="post">
   <div>
-    <label for="pilot[user_id]">User ID:</label> <input name="pilot[user_id]" type="text" value="<%= @pilot.user_id %>"/>
+    <label for="pilot[user_id]">Eve User ID:</label> <input name="pilot[user_id]" type="text" value="<%= @pilot.user_id %>"/>
   </div>
   <div>
-    <label for="pilot[api_key]">API Key:</label> <input name="pilot[api_key]" type="text" value="<%= @pilot.api_key %>"/>
+    <label for="pilot[api_key]">Eve API Key:</label> <input name="pilot[api_key]" type="text" value="<%= @pilot.api_key %>"/>
   </div>
   <div>
-    <label for="pilot[email]">Email:</label> <input name="pilot[email]" type="text" value="<%= @pilot.email %>"/>
+    <label for="pilot[email]">Email:</label> <input name="pilot[email]" type="text" value="<%= @pilot.email %>"/><br/>
+    <span style="color: grey; font-size: small">If left blank, will use your google email address.</span>
   </div>
   <div>
     <label for="pilot[monitor]">Send empty queue warnings?</label> <input name="pilot[monitor]" type="checkbox" value="1" <%= 'checked="checked"' if @pilot.monitor %> disabled />

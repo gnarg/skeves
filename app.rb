@@ -29,17 +29,20 @@ class Pilot
   validates_present :api_key
 
   def skill_queue
-    api = Reve::API.new(self.user_id, self.api_key)
-    queue = []
-    api.characters.each do |character|
-      queue = api.skill_queue(:characterid => character.id)
-      if queue.any?
-        @character = character
-        break
+    if !@skills
+      queue = []
+      api = Reve::API.new(self.user_id, self.api_key)
+      api.characters.each do |character|
+        queue = api.skill_queue(:characterid => character.id)
+        if queue.any?
+          @character = character
+          break
+        end
       end
+      @skills = queue.map{|s| Skeves::Skill.new(s)}
     end
-
-    queue.map{|s| Skeves::Skill.new(s)}    
+    
+    @skills
   end
   
   def character
@@ -94,8 +97,15 @@ end
 
 get '/cron/monitor' do
   Pilot.all(:monitor => true).each do |pilot|
-    send_queue_warning(pilot) unless pilot.skill_queue.any?
+    begin
+      send_queue_warning(pilot) unless pilot.skill_queue.any?
+      logger.info "Sent email to #{pilot.nickname}."
+    rescue Exception => e
+      logger.warn "Problem with #{pilot.nickname}: #{e.message}"
+    end
   end
+
+  'ok'
 end
 
 def send_queue_warning(pilot)

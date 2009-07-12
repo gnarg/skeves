@@ -38,7 +38,8 @@ Warbler::Config.new do |config|
   # The Rails gems are included by default unless the vendor/rails directory is present.
   config.gems = ['sinatra']
   config.gems['hpricot'] = '~>0.6.1'
-  config.gems += ['dsander-reve', 'lstoll-rb-gae-support', 'appengine-apis']
+  config.gems += [ 'dsander-reve', 'lstoll-rb-gae-support', 'appengine-apis' ]
+  config.gems += [ 'dm-core', 'dm-validations', 'dm-datastore-adapter' ]
  
   # Uncomment this if you don't want to package rails gem.
   # config.gems -= ["rails"]

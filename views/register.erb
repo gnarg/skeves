@@ -1,1 +1,9 @@
-DO EET!
+<form action="/register" method="post">
+  <div>
+    <label for="pilot[user_id]">User ID:</label> <input name="pilot[user_id]" type="text" value="<%= @pilot.user_id %>"/>
+  </div>
+  <div>
+    <label for="pilot[api_key]">API Key:</label> <input name="pilot[api_key]" type="text" value="<%= @pilot.api_key %>"/>
+  </div>
+  <input type="submit" value="update"/>
+</form>

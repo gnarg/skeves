@@ -1,9 +1,15 @@
-<h3>Hai!</h3>
+<img src="http://skeves.s3.amazonaws.com/EVEOnlineLogo.png" height="50"/>
+
+<h3>Skill Queue Viewer</h3>
 
 <% if @user %>
-  <div><a href="/queue">Skill Queue</a></div>
+  <% if @pilot %>
+    <div><a href='/queue'>Skill Queue</a></div>
+    <div><a href="/register">Settings</a></div>
+  <% else %>
+    <div><a href="/register">Register</a></div>
+  <% end %>
   <div><a href="<%= Users.create_logout_url('/') %>">Sign Out</a></div>
 <% else %>
-  <div><a href="/register">Register</a></div>
   <div><a href="<%= Users.create_login_url('/') %>">Sign In</a></div>
 <% end %>

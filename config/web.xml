@@ -57,7 +57,6 @@ run Sinatra::Application
     <listener-class>org.jruby.rack.RackServletContextListener</listener-class>
   </listener>
 
-<!--
   <security-constraint>
     <web-resource-collection>
       <url-pattern>/cron/*</url-pattern>
@@ -66,5 +65,4 @@ run Sinatra::Application
       <role-name>admin</role-name>
     </auth-constraint>
   </security-constraint>
--->
 </web-app>

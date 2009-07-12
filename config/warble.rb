@@ -14,7 +14,7 @@ Warbler::Config.new do |config|
  
   # Additional files/directories to include, above those in config.dirs
   # config.includes = FileList["db"]
-  config.includes = FileList["appengine-web.xml", "app.rb", "config.ru", "config/eve_auth.yml"]
+  config.includes = FileList["appengine-web.xml", "app.rb", "config.ru", "cron.xml"]
   # Additional files/directories to exclude
   # config.excludes = FileList["lib/tasks/*"]
  

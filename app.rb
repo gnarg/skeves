@@ -4,6 +4,7 @@ require 'yaml'
 require 'lib/skills'
 require 'appengine-apis/users'
 require 'appengine-apis/logger'
+require 'appengine-apis/mail'
 require 'dm-core'
 require 'dm-validations'
 require 'dm-datastore-adapter/datastore-adapter'
@@ -39,7 +40,7 @@ class Pilot
           break
         end
       end
-      @skills = queue.map{|s| Skeves::Skill.new(s)}
+      @skills = queue.select{|s| s.end_time.kind_of? Time}.map{|s| Skeves::Skill.new(s)}
     end
     
     @skills
@@ -68,6 +69,7 @@ end
 post '/pilot' do
   @pilot ||= Pilot.new
   @pilot.attributes = params['pilot']
+  @pilot.monitor = !params['pilot']['monitor'].nil?
   if @pilot.email.nil? || @pilot.email.empty?
     @pilot.email = @user.email
   end
@@ -88,20 +90,31 @@ get '/queue' do
   if !@pilot
     redirect '/pilot'
   end
+
+  begin
+    @skills = @pilot.skill_queue
+  rescue Reve::Exceptions => e
+    return "Eve didn't like you auth information: #{e.message}"
+  rescue Exception => e
+    return "Please try again later."
+  end
   
-  @skills = @pilot.skill_queue
   return 'No skills in queue.' if @skills.empty?
   
   erb :queue
 end
 
 get '/cron/monitor' do
+  gae_log = AppEngine::Logger.new
+  
   Pilot.all(:monitor => true).each do |pilot|
     begin
-      send_queue_warning(pilot) unless pilot.skill_queue.any?
-      logger.info "Sent email to #{pilot.nickname}."
+      if pilot.skill_queue.empty?
+        send_queue_warning(pilot)  
+        gae_log.info "Sent email to #{pilot.nickname}."
+      end
     rescue Exception => e
-      logger.warn "Problem with #{pilot.nickname}: #{e.message}"
+      gae_log.warn "Problem with #{pilot.nickname}: #{e.class.name} - #{e.message}"
     end
   end
 
@@ -110,11 +123,11 @@ end
 
 def send_queue_warning(pilot)
   user_address = pilot.email
-  sender_address = "monitor@jguymon-skeves.appspot.com"
-  subject = "[skeves] Skill queue empty"
+  sender_address = "jon.guymon@gmail.com"
+  subject = "[skeves] Skill queue empty."
   body = <<-EOM
-    No skill currently training.
+    No skill in training.
   EOM
     
-  Mail.send(sender_address, user_address, subject, body)
+  AppEngine::Mail.send(sender_address, user_address, subject, body)
 end

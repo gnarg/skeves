@@ -1,57 +1,11 @@
 require 'sinatra'
 require 'reve'
 require 'yaml'
+require 'models'
 require 'lib/skills'
 require 'appengine-apis/users'
 require 'appengine-apis/logger'
 require 'appengine-apis/mail'
-require 'dm-core'
-require 'dm-validations'
-require 'dm-datastore-adapter/datastore-adapter'
-
-include AppEngine
-
-DataMapper.setup(:default,
-                 { :adapter => :datastore,
-                   :host => 'localhost' })
-
-class Pilot
-  include DataMapper::Resource
-  
-  property :id,       Serial
-  property :nickname, String
-  property :user_id,  String
-  property :api_key,  String, :size => 64
-  property :email,    String, :length => (1..255), :format => :email_address
-  property :monitor,  Boolean, :default => false
-  property :notified, Boolean, :default => false
-
-  validates_present :nickname
-  validates_present :user_id
-  validates_present :api_key
-
-  def skill_queue
-    if !@skills
-      queue = []
-      api = Reve::API.new(self.user_id, self.api_key)
-      api.characters.each do |character|
-        queue = api.skill_queue(:characterid => character.id)
-        if queue.any?
-          @character = character
-          break
-        end
-      end
-      @skills = queue.select{|s| s.end_time.kind_of? Time}.map{|s| Skeves::Skill.new(s)}
-    end
-    
-    @skills
-  end
-  
-  def character
-    skill_queue if !@character
-    @character
-  end
-end
 
 before do
   @user = Users.current_user
@@ -59,6 +13,18 @@ before do
 end 
 
 get '/' do
+  if @pilot
+    begin
+      @skills = @pilot.skill_queue
+    rescue Reve::Exceptions => e
+      return "Eve didn't like you auth information: #{e.message}"
+    rescue Exception => e
+      return "Error fetching your queue, please try again later: #{e.message}"
+    end
+  
+    return 'No skills in queue.' if @skills.empty?
+  end
+
   erb :index
 end
 
@@ -81,28 +47,6 @@ post '/pilot' do
   else
     "ERROR: #{@pilot.errors.inspect}"
   end
-end
-
-get '/queue' do
-  if !@user
-    redirect Users.create_login_url('/queue')
-  end
-
-  if !@pilot
-    redirect '/pilot'
-  end
-
-  begin
-    @skills = @pilot.skill_queue
-  rescue Reve::Exceptions => e
-    return "Eve didn't like you auth information: #{e.message}"
-  rescue Exception => e
-    return "Please try again later."
-  end
-  
-  return 'No skills in queue.' if @skills.empty?
-  
-  erb :queue
 end
 
 get '/cron/monitor' do

@@ -1,15 +1,35 @@
 <img src="http://skeves.s3.amazonaws.com/EVEOnlineLogo.png" height="50"/>
 
-<h3>Skill Queue Viewer</h3>
+<% if @pilot %>
+<hr/>
+<div>
+  <h3>Skill queue for: <%= @pilot.character.name %></h3>
+  <div>
+    <strong>Queue length:</strong> <%= @skills.last.days_left %>d <%= @skills.last.hours_left %>h <%= @skills.last.minutes_left %>m <%= @skills.last.seconds_left %>s (<%= @skills.last.end_time.strftime('%m/%d/%y %H:%M:%S') %>)
+  </div>
+  
+  <ol>
+    <% @skills.each do |skill| %>
+    <li>
+      <strong><%= skill.name %> <%= skill.to_level %></strong> 
+      finishes in <%= skill.days_left %>d <%= skill.hours_left %>h <%= skill.minutes_left %>m <%= skill.seconds_left %>s (<%= skill.end_time.strftime('%m/%d/%y %H:%M:%S') %>)
+    </li>
+    <% end %>
+  </ol>
 
+  <div><strong>Time now:</strong> <%= Time.now.utc.strftime('%m/%d/%y %H:%M:%S') %></div>
+</div>
+<% end %>
+<hr/>
+<div>
 <% if @user %>
   <% if @pilot %>
-    <div><a href="/queue">Skill Queue</a></div>
-    <div><a href="/pilot">Settings</a></div>
+    <span><a href="/pilot">Settings</a></span>
   <% else %>
-    <div><a href="/pilot">Register</a></div>
+    <span><a href="/pilot">Register</a></span>
   <% end %>
-  <div><a href="<%= Users.create_logout_url('/') %>">Sign Out</a></div>
+  <span><a href="<%= Users.create_logout_url('/') %>">Sign Out</a></span>
 <% else %>
   <div><a href="<%= Users.create_login_url('/') %>">Sign In</a></div>
 <% end %>
+</div>

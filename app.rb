@@ -43,7 +43,7 @@ post '/pilot' do
   @pilot.nickname = @user.nickname
   
   if @pilot.save
-    redirect '/queue'
+    redirect '/'
   else
     "ERROR: #{@pilot.errors.inspect}"
   end

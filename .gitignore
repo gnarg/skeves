@@ -1,6 +1,4 @@
-eve_auth.yml
-Capfile
-config/deploy.rb
 appengine-web.xml
 *.war
 tmp
+.ditz-config

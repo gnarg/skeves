@@ -71,7 +71,7 @@ end
 
 def send_queue_warning(pilot)
   user_address = pilot.email
-  sender_address = "jon.guymon@skeves.com"
+  sender_address = "monitor@skeves.com"
   subject = "[skeves] Skill queue empty."
   body = <<-EOM
     No skill in training.

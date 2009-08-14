@@ -49,10 +49,12 @@ post '/pilot' do
   end
 end
 
-get '/cron/monitor' do
+get '/cron/monitor/:set' do
   gae_log = AppEngine::Logger.new
   
-  Pilot.all(:monitor => true).each do |pilot|
+  all = Pilot.all(:monitor => true)
+  
+  all.partition{|p| p.user_id % 2 == 0 }[params[:set]].each do |pilot|
     begin
       if pilot.skill_queue.empty? && !pilot.notified
         send_queue_warning(pilot)  

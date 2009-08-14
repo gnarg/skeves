@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
   <cron>
-    <url>/cron/monitor</url>
+    <url>/cron/monitor/0</url>
+    <description>Send emails for empty skill queues</description>
+    <schedule>every 30 minutes</schedule>
+  </cron>
+  <cron>
+    <url>/cron/monitor/1</url>
     <description>Send emails for empty skill queues</description>
     <schedule>every 30 minutes</schedule>
   </cron>

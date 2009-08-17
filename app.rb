@@ -54,7 +54,7 @@ get '/cron/monitor/:set' do
   
   all = Pilot.all(:monitor => true)
   
-  all.partition{|p| p.user_id % 2 == 0 }[params[:set].to_i].each do |pilot|
+  all.partition{|p| p.user_id.to_i % 2 == 0 }[params[:set].to_i].each do |pilot|
     begin
       if pilot.skill_queue.empty? && !pilot.notified
         send_queue_warning(pilot)  

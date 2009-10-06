@@ -2,3 +2,6 @@ appengine-web.xml
 *.war
 tmp
 .ditz-config
+WEB-INF/appengine-generated/*
+WEB-INF/web.xml
+WEB-INF/appengine-web.xml

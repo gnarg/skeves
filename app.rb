@@ -6,6 +6,7 @@ require 'lib/skills'
 require 'appengine-apis/users'
 require 'appengine-apis/logger'
 require 'appengine-apis/mail'
+require 'appengine-apis/labs/taskqueue'
 
 before do
   @user = Users.current_user
@@ -49,26 +50,36 @@ post '/pilot' do
   end
 end
 
-get '/cron/monitor/:set' do
-  gae_log = AppEngine::Logger.new
-  
-  all = Pilot.all(:monitor => true)
-  
-  all.partition{|p| p.user_id.to_i % 2 == 0 }[params[:set].to_i].each do |pilot|
-    begin
-      if pilot.skill_queue.empty? && !pilot.notified
-        send_queue_warning(pilot)  
-        gae_log.info "Sent email to #{pilot.nickname}."
-      elsif pilot.skill_queue.any? && pilot.notified
-        pilot.notified = false
-        pilot.save
-      end
-    rescue Exception => e
-      gae_log.warn "Problem with #{pilot.nickname}: #{e.class.name} - #{e.message}"
-    end
+get '/cron/monitor' do
+  Pilot.all(:monitor => true).each do |pilot|
+    url = "/queue/monitor/#{pilot.nickname}"
+    AppEngine::Labs::TaskQueue.add(:url => url)
   end
 
   'ok'
+end
+
+post '/queue/monitor/:pilot' do
+  pilot = Pilot.first(:nickname => params[:pilot])
+  begin
+    if pilot.skill_queue.empty? && !pilot.notified
+      url = "/queue/notify/#{pilot.nickname}"
+      AppEngine::Labs::TaskQueue.add(:url => url)
+    elsif pilot.skill_queue.any? && pilot.notified
+      pilot.notified = false
+      pilot.save
+    end
+  rescue Exception => e
+    gae_log = AppEngine::Logger.new    
+    gae_log.warn "Problem with #{pilot.nickname}: #{e.class.name} - #{e.message}"
+  end  
+end
+
+post '/queue/notify/:pilot' do
+  pilot = Pilot.first(:nickname => params[:pilot])
+  send_queue_warning(pilot)
+  gae_log = AppEngine::Logger.new  
+  gae_log.info "Sent email to #{pilot.nickname}."
 end
 
 def send_queue_warning(pilot)

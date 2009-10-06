@@ -1,0 +1,19 @@
+<queue-entries>
+  <queue>
+    <name>default</name>
+    <rate>10/s</rate>
+    <bucket-size>5</bucket-size>
+  </queue>
+<!--
+  <queue>
+    <name>notify</name>
+    <rate>2/s</rate>
+    <bucket-size>5</bucket-size>
+  </queue>
+  <queue>
+    <name>monitor</name>
+    <rate>6/s</rate>
+    <bucket-size>5</bucket-size>
+  </queue>
+-->
+</queue-entries>

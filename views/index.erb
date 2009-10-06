@@ -22,11 +22,13 @@
 <% end %>
 <hr/>
 <div>
+
 <% if @user %>
   <% if @pilot %>
     <span><a href="/pilot">Settings</a></span>
   <% else %>
     <span><a href="/pilot">Register</a></span>
+    <div>If you've been here before, you may have to re-register, sorry about that.</div>
   <% end %>
   <span><a href="<%= Users.create_logout_url('/') %>">Sign Out</a></span>
 <% else %>

@@ -1,4 +1,5 @@
 require 'delegate'
+require 'hpricot'
 
 module Skeves
   class Skill < SimpleDelegator

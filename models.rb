@@ -1,13 +1,10 @@
 require 'appengine-apis'
 require 'dm-core'
 require 'dm-validations'
-require 'dm-datastore-adapter/datastore-adapter'
 
 include AppEngine
 
-DataMapper.setup(:default,
-                 { :adapter => :datastore,
-                   :host => 'localhost' })
+DataMapper.setup(:default, 'appengine://auto')
 
 class Pilot
   include DataMapper::Resource
@@ -15,7 +12,7 @@ class Pilot
   property :id,       Serial
   property :nickname, String
   property :user_id,  String
-  property :api_key,  String, :size => 64
+  property :api_key,  String, :length => 64
   property :email,    String, :length => (1..255), :format => :email_address
   property :monitor,  Boolean, :default => false
   property :notified, Boolean, :default => false

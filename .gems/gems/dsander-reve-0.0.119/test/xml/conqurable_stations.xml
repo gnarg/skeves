@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<eveapi version="2">
+  <currentTime>2009-02-17 16:33:24</currentTime>
+  <result>
+    <rowset name="outposts" key="stationID" columns="stationID,stationName,stationTypeID,solarSystemID,corporationID,corporationName">
+      <row stationID="61000095" stationName="Mindframe Savings and Loan" stationTypeID="21646" solarSystemID="30003230" corporationID="709221692" corporationName="Blueprint Haus" />
+      <row stationID="61000096" stationName="Q3 Manlove Division" stationTypeID="21644" solarSystemID="30000324" corporationID="1639878825" corporationName="Initiative Holding" />
+      <row stationID="61000097" stationName="3L Elrac's Bag of Nuts" stationTypeID="21646" solarSystemID="30000448" corporationID="1519479143" corporationName="Scorched Earth Holdings" />
+    </rowset>
+  </result>
+  <cachedUntil>2009-02-17 17:33:24</cachedUntil>
+</eveapi>

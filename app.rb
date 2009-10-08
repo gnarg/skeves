@@ -14,19 +14,20 @@ before do
 end 
 
 get '/' do
-  if @pilot
-    begin
-      @skills = @pilot.skill_queue
-    rescue Reve::Exceptions => e
-      return "Eve didn't like you auth information: #{e.message}"
-    rescue Exception => e
-      return "Error fetching your queue, please try again later: #{e.message}"
-    end
-  
-    return 'No skills in queue.' if @skills.empty?
-  end
-
   erb :index
+end
+
+get '/skills/:pilot' do
+  @pilot = Pilot.first(:nickname => params[:pilot])
+  begin
+    @skills = @pilot.skill_queue
+  rescue Exception => e
+    return "Error fetching your queue, please check your API info and try again later: #{e.class.name} - #{e.message}"
+  end
+  
+  return 'No skills in queue.' if @skills.empty?
+
+  erb :skills
 end
 
 get '/pilot' do

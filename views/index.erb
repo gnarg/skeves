@@ -2,22 +2,14 @@
 
 <% if @pilot %>
 <hr/>
-<div>
-  <h3>Skill queue for: <%= @pilot.character.name %></h3>
-  <div>
-    <strong>Queue length:</strong> <%= @skills.last.days_left %>d <%= @skills.last.hours_left %>h <%= @skills.last.minutes_left %>m <%= @skills.last.seconds_left %>s (<%= @skills.last.end_time.strftime('%m/%d/%y %H:%M:%S') %>)
-  </div>
-  
-  <ol>
-    <% @skills.each do |skill| %>
-    <li>
-      <strong><%= skill.name %> <%= skill.to_level %></strong> 
-      finishes in <%= skill.days_left %>d <%= skill.hours_left %>h <%= skill.minutes_left %>m <%= skill.seconds_left %>s (<%= skill.end_time.strftime('%m/%d/%y %H:%M:%S') %>)
-    </li>
-    <% end %>
-  </ol>
-
-  <div><strong>Time now:</strong> <%= Time.now.utc.strftime('%m/%d/%y %H:%M:%S') %></div>
+<div id="skills">
+  <img src="http://skeves.s3.amazonaws.com/spinner.gif" />
+  <span>Loading</span>
+  <script type="text/javascript">
+    $(function(){
+      $("#skills").load("/skills/<%= @pilot.nickname %>");
+    });
+  </script>
 </div>
 <% end %>
 <hr/>

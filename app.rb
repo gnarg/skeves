@@ -17,8 +17,7 @@ get '/' do
   erb :index
 end
 
-get '/skills/:pilot' do
-  @pilot = Pilot.first(:nickname => params[:pilot])
+get '/skillqueue' do
   begin
     @skills = @pilot.skill_queue
   rescue Exception => e
@@ -27,7 +26,7 @@ get '/skills/:pilot' do
   
   return 'No skills in queue.' if @skills.empty?
 
-  erb :skills
+  erb :skillqueue
 end
 
 get '/pilot' do

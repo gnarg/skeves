@@ -32,7 +32,8 @@ class Pilot
           break
         end
       end
-      @skills = queue.select{|s| s.end_time.kind_of? Time}.map{|s| Skeves::Skill.new(s)}
+      @skills = queue.select{|s| s.end_time.kind_of? Time} \
+        .map{|s| Skeves::Skill.new(s)}
     end
     
     @skills
